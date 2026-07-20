@@ -1,9 +1,10 @@
 :root {
     --tg-theme-bg-color: #ffffff;
-    --tg-theme-text-color: #222222;
-    --tg-theme-button-color: #e65100; /* Фірмовий помаранчевий/крафтовий акцент */
+    --tg-theme-text-color: #111111;
+    --tg-theme-button-color: #000000; /* Контрастний стиль під чорно-біле лого */
     --tg-theme-button-text-color: #ffffff;
     --tg-theme-secondary-bg-color: #f4f4f5;
+    --accent-orange: #e65100;
 }
 
 body {
@@ -20,10 +21,19 @@ body {
 
 .container {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 180px;
+    height: auto;
 }
 
 .screen {
@@ -34,24 +44,25 @@ body {
     display: block;
 }
 
-h1 { font-size: 24px; margin-bottom: 12px; }
-h2 { font-size: 20px; margin-bottom: 20px; }
-p { font-size: 15px; line-height: 1.4; color: #666; }
+h1 { font-size: 22px; margin-bottom: 12px; font-weight: 800; }
+h2 { font-size: 19px; margin-bottom: 18px; line-height: 1.3; }
+p { font-size: 14px; line-height: 1.5; color: #555; }
 
 .btn {
     background-color: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
     border: none;
     padding: 14px 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     width: 100%;
     margin-top: 15px;
     text-decoration: none;
     display: inline-block;
     box-sizing: border-box;
+    transition: background-color 0.2s;
 }
 
 .btn-secondary {
@@ -67,17 +78,32 @@ p { font-size: 15px; line-height: 1.4; color: #666; }
 
 .answer-btn {
     background-color: var(--tg-theme-secondary-bg-color);
-    border: 1px solid #e0e0e0;
-    padding: 14px;
+    border: 1px solid #e2e2e8;
+    padding: 12px 16px;
     border-radius: 10px;
     text-align: left;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    color: var(--tg-theme-text-color);
 }
 
 .answer-btn:active {
     transform: scale(0.98);
+    background-color: #e8e8ed;
+}
+
+.progress-container {
+    margin-bottom: 15px;
+}
+
+#question-count {
+    font-size: 12px;
+    color: #888;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
 }
 
 .progress-bar {
@@ -85,26 +111,27 @@ p { font-size: 15px; line-height: 1.4; color: #666; }
     height: 6px;
     background-color: #eee;
     border-radius: 3px;
-    margin-bottom: 20px;
     overflow: hidden;
 }
 
 #progress {
     height: 100%;
     width: 0%;
-    background-color: var(--tg-theme-button-color);
+    background-color: var(--accent-orange);
     transition: width 0.3s ease;
 }
 
 .badge {
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 1px;
     color: #888;
+    font-weight: 700;
 }
 
 .style-tag {
-    font-weight: bold;
-    color: var(--tg-theme-button-color);
+    font-weight: 700;
+    color: var(--accent-orange);
     margin-top: -10px;
+    font-size: 13px;
 }
