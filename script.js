@@ -33,6 +33,17 @@ const questions = [
             { text: "Ніжним та грайливим кошеням 🐾", beer: "milky_mango" }
         ]
     }
+
+ {
+        question: "Якби ти був пивом ти був би",
+        answers: [
+            { text: "Лагером", beer: "kyiv_lager" },
+            { text: "Томатним", beer: "gaijin" },
+            { text: "Патужним", beer: "capital_dipa" },
+            { text: "Солоденьким", beer: "milky_mango" }
+        ]
+    }
+    
 ];
 
 // База даних результатів пива
