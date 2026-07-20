@@ -4,34 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Яке ти пиво Underwood?</title>
-    <!-- Підключення Telegram WebApp API -->
+    <!-- Telegram WebApp API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
+        <!-- Логотип зверху -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Underwood Brewery" class="logo">
+        </div>
+
         <!-- Екран привітання -->
         <div id="start-screen" class="screen active">
             <h1>🍻 Яке ти пиво від Underwood?</h1>
-            <p>Пройди короткий тест із 4 питань та дізнайся, який стиль Underwood найкраще описує твій настрій сьогодні!</p>
+            <p>Дай відповідь на 10 коротких та веселих питань, щоб дізнатися, який стиль Underwood найкраще описує твій вайб сьогодні!</p>
             <button class="btn" onclick="startQuiz()">Пройти тест</button>
         </div>
 
         <!-- Екран питань -->
         <div id="quiz-screen" class="screen">
-            <div class="progress-bar"><div id="progress"></div></div>
+            <div class="progress-container">
+                <span id="question-count">Питання 1/10</span>
+                <div class="progress-bar"><div id="progress"></div></div>
+            </div>
             <h2 id="question-text">Текст питання</h2>
             <div id="answers-container" class="answers"></div>
         </div>
 
         <!-- Екран результату -->
         <div id="result-screen" class="screen">
-            <span class="badge">Твій результат:</span>
+            <span class="badge">Твій внутрішній сорт:</span>
             <h2 id="beer-title">Назва пива</h2>
             <p id="beer-style" class="style-tag">Стиль</p>
             <p id="beer-desc">Опис результату</p>
             <div class="result-actions">
-                <a id="order-link" href="#" target="_blank" class="btn">🛒 Замовити це пиво</a>
+                <a id="order-link" href="#" target="_blank" class="btn">🛒 Замовити на сайті</a>
                 <button class="btn btn-secondary" onclick="restartQuiz()">🔄 Пройти ще раз</button>
             </div>
         </div>
