@@ -5,13 +5,7 @@ if (tg) {
 }
 
 // Функція для випадкового перемішування елементів масиву
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+
 
 // 10 Різноманітних та веселих питань
 // 10 Питань під 4 конкретні сорти пива Underwood
@@ -140,24 +134,30 @@ const beerResults = {
 let currentQuestion = 0;
 let scores = {};
 
+// 1. УНІВЕРСАЛЬНА ФУНКЦІЯ ПЕРЕМІШУВАННЯ (поклади її на самому початку файлу)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// 2. ФУНКЦІЯ СТАРТУ ТЕСТУ
 function startQuiz() {
-    // 1. Скидаємо лічильники та стан
     currentQuestionIndex = 0;
-    scores = {
-        kyiv_lager: 0,
-        gaijin: 0,
-        milky_mango: 0,
-        capital_dipa: 0
-    };
+    
+    // Перевіряємо, чи існує масив питань перед перемішуванням
+    if (typeof questions !== 'undefined' && questions.length > 0) {
+        shuffleArray(questions); // Перемішуємо питання
+        questions.forEach(q => {
+            if (q.answers) {
+                shuffleArray(q.answers); // Перемішуємо варіанти відповідей
+            }
+        });
+    }
 
-    // 2. ПЕРЕМІШУВАННЯ (вставляємо сюди):
-    shuffleArray(questions); // Перемішуємо самі питання
-    questions.forEach(q => {
-        shuffleArray(q.answers); // Перемішуємо 4 варіанти відповідей у кожному питанні
-    });
-
-    // 3. Показуємо перше питання
-    showQuestion();
+    showQuestion(); // Викликаємо відображення першого питання
 }
 
 function renderQuestion() {
