@@ -1,10 +1,6 @@
-// Ініціалізація Telegram Web App
-const tg = window.Telegram ? window.Telegram.WebApp : null;
-if (tg) {
-    tg.expand();
-}
-
-// 10 Питань під 4 конкретні сорти пива Underwood
+// ==========================================
+// 1. БАЗА ПИТАНЬ ТА ВАРІАНТІВ ВІДПОВІДЕЙ
+// ==========================================
 const questions = [
     {
         question: "1. Твій ідеальний вечір п'ятниці — це:",
@@ -65,7 +61,7 @@ const questions = [
         answers: [
             { text: "Спокійний пухнастик, який гріється на сонечку ☀️", beer: "kyiv_lager" },
             { text: "Загадковий сфінкс зі своїм особливим вайбом 🐈‍⬛", beer: "gaijin" },
-            { text: "Гра грайливого гедоніста, який любить ласощі 🐾", beer: "milky_mango" },
+            { text: "Грайливий гедоніст, який любить ласощі 🐾", beer: "milky_mango" },
             { text: "Енергійний мейн-кун, який тримає все під контролем 🦁", beer: "capital_dipa" }
         ]
     },
@@ -98,101 +94,139 @@ const questions = [
     }
 ];
 
-// База даних результатів із прямими посиланнями
+// ==========================================
+// 2. ОПИСИ РЕЗУЛЬТАТІВ
+// ==========================================
 const beerResults = {
-    capital_dipa: {
-        title: "CAPITAL DIPA 💥",
-        style: "Double IPA (ABV 8.0% | IBU 60)",
-        desc: "Ти — бескомпромісний лідер із потужним характером! Любиш виразні смаки, не боїшся складнощів і завжди береш від життя максимум.",
-        url: "https://underwood.beer/product/pyvo-svitle-capital-dipa-033-l-banka-8-0/?utm_source=telegram"
-    },
     kyiv_lager: {
-        title: "KYIV LAGER 🍺",
-        style: "Helles Lager (ABV 5.1% | IBU 19)",
-        desc: "Ти — золота класика та душа компанії. Душевність, стабільність і затишок — це твої головні орієнтири.",
-        url: "https://underwood.beer/product/kyiv-lager/?utm_source=telegram"
+        title: "Твій сорт — Kyiv Lager 🍺",
+        desc: "Ти цінуєш душевність, гармонію та перевірену якість. Твій вибір — світла та освіжаюча класика, яка ідеально підходить під будь-який настрій."
     },
     gaijin: {
-        title: "GAIJIN 🥢",
-        style: "Asian Tomato Gose (ABV 3.0% | IBU 19)",
-        desc: "Ти — сміливий гастро-експериментатор! Тебе не лякають нестандартні поєднання соєвого та устричного соусів, а твій стиль завжди дивує.",
-        url: "https://underwood.beer/product/pyvo-svitle-gaijin-0-33-l-banka-30/?utm_source=telegram"
+        title: "Твій сорт — Gaijin 🌶",
+        desc: "Ти справжній шукач яскравих гастрономічних вражень! Азійський томатний ґозе зі спеціями та умамі-нотами створений саме для твоїх експериментів."
     },
     milky_mango: {
-        title: "MILKY MANGO 🥭",
-        style: "Milkshake IPA (ABV 5.5% | IBU 30)",
-        desc: "Ти — справжній гедоніст! Вмієш насолоджуватися моментом, цінуєш затишок і солодкі радості життя.",
-        url: "https://underwood.beer/product/milky-mango/?utm_source=telegram"
+        title: "Твій сорт — Milky Mango 🥭",
+        desc: "Ти вмієш насолоджуватися життям та обираєш соковитий гедонізм. Ніжний Milkshake IPA з соковитим манго — це твоє літо в келиху."
+    },
+    capital_dipa: {
+        title: "Твій сорт — Capital DIPA 🔥",
+        desc: "Максимум енергії, безкомпромісна гіркота та міць. Потужний Double IPA створений для тих, хто звик брати від життя максимум."
     }
-   
 };
 
-let currentQuestion = 0;
-let scores = {};
+// ==========================================
+// 3. ЗМІННІ СТАНУ ТА ЕЛЕМЕНТИ DOM
+// ==========================================
+let currentQuestionIndex = 0;
+let scores = { kyiv_lager: 0, gaijin: 0, milky_mango: 0, capital_dipa: 0 };
 
-function startQuiz() {
-    currentQuestion = 0;
-    scores = {};
-    showScreen('quiz-screen');
-    renderQuestion();
+// Елементи
+const startScreen = document.getElementById('start-screen');
+const quizScreen = document.getElementById('quiz-screen');
+const resultScreen = document.getElementById('result-screen');
+
+const startBtn = document.getElementById('start-btn');
+const restartBtn = document.getElementById('restart-btn');
+
+const questionTitle = document.getElementById('question-title');
+const answersContainer = document.getElementById('answers-container');
+
+const resultTitle = document.getElementById('result-title');
+const resultDesc = document.getElementById('result-desc');
+
+// ==========================================
+// 4. ФУНКЦІЯ ПЕРЕМІШУВАННЯ (FISHER-YATES)
+// ==========================================
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
-function renderQuestion() {
-    const q = questions[currentQuestion];
-    document.getElementById('question-text').innerText = q.question;
-    document.getElementById('question-count').innerText = `Питання ${currentQuestion + 1}/${questions.length}`;
-    
-    const progressPercent = ((currentQuestion) / questions.length) * 100;
-    document.getElementById('progress').style.width = `${progressPercent}%`;
+// ==========================================
+// 5. ЛОГІКА ТЕСТУ
+// ==========================================
 
-    const answersContainer = document.getElementById('answers-container');
+// Запуск тесту
+function startQuiz() {
+    currentQuestionIndex = 0;
+    scores = { kyiv_lager: 0, gaijin: 0, milky_mango: 0, capital_dipa: 0 };
+
+    // Перемішуємо самі питання
+    shuffleArray(questions);
+
+    // Перемішуємо 4 варіанти відповідей всередині кожного питання
+    questions.forEach(q => {
+        if (q.answers) {
+            shuffleArray(q.answers);
+        }
+    });
+
+    // Перемикаємо екрани
+    if (startScreen) startScreen.classList.add('hidden');
+    if (resultScreen) resultScreen.classList.add('hidden');
+    if (quizScreen) quizScreen.classList.remove('hidden');
+
+    showQuestion();
+}
+
+// Відображення поточного питання
+function showQuestion() {
     answersContainer.innerHTML = '';
+    const currentQ = questions[currentQuestionIndex];
 
-    q.answers.forEach(ans => {
-        const btn = document.createElement('button');
-        btn.className = 'answer-btn';
-        btn.innerText = ans.text;
-        btn.onclick = () => selectAnswer(ans.beer);
-        answersContainer.appendChild(btn);
+    questionTitle.textContent = currentQ.question;
+
+    currentQ.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.textContent = answer.text;
+        button.classList.add('answer-btn');
+        button.addEventListener('click', () => selectAnswer(answer.beer));
+        answersContainer.appendChild(button);
     });
 }
 
-function selectAnswer(beerKey) {
-    scores[beerKey] = (scores[beerKey] || 0) + 1;
-    currentQuestion++;
+// Вибір відповіді
+function selectAnswer(beerType) {
+    if (scores.hasOwnProperty(beerType)) {
+        scores[beerType]++;
+    }
 
-    if (currentQuestion < questions.length) {
-        renderQuestion();
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
     } else {
         showResult();
     }
 }
 
+// Розрахунок та показування результату
 function showResult() {
-    let topBeer = 'kyiv_lager';
-    let maxScore = -1;
+    if (quizScreen) quizScreen.classList.add('hidden');
+    if (resultScreen) resultScreen.classList.remove('hidden');
 
-    for (const beer in scores) {
-        if (scores[beer] > maxScore) {
-            maxScore = scores[beer];
-            topBeer = beer;
-        }
+    // Знаходимо сорт із найбільшою кількістю балів
+    let topBeer = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+    const result = beerResults[topBeer];
+
+    resultTitle.textContent = result.title;
+    resultDesc.textContent = result.desc;
+}
+
+// ==========================================
+// 6. ПРИВ'ЯЗКА ПОДІЙ (СЛУХАЧІ КНОПОК)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    if (startBtn) {
+        startBtn.addEventListener('click', startQuiz);
     }
-
-    const result = beerResults[topBeer] || beerResults['kyiv_lager'];
-    document.getElementById('beer-title').innerText = result.title;
-    document.getElementById('beer-style').innerText = result.style;
-    document.getElementById('beer-desc').innerText = result.desc;
-    document.getElementById('order-link').href = result.url;
-
-    showScreen('result-screen');
-}
-
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-}
-
-function restartQuiz() {
-    showScreen('start-screen');
-}
+    
+    if (restartBtn) {
+        restartBtn.addEventListener('click', startQuiz);
+    }
+});
