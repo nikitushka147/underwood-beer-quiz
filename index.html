@@ -3,51 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Яке ти пиво Underwood?</title>
-
-    <link rel="icon" type="image/png" href="logoU.png">
-    
-    <!-- Telegram WebApp API -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Твій ідеальний сорт Underwood 🍻</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Логотип зверху -->
-        <div class="logo-container">
-            <img src="logo.png" alt="Underwood Brewery" class="logo">
+
+    <div class="quiz-container">
+
+        <!-- 1. ЕКРАН СТАРТУ -->
+        <div id="start-screen" class="screen">
+            <h1>Яке ти пиво від Underwood сьогодні? 🍺</h1>
+            <p>Пройди короткий тест із 10 питань і дізнайся, який сорт ідеально пасує твоєму настрою!</p>
+            <button id="start-btn" class="main-btn">Почати тест</button>
         </div>
 
-        <!-- Екран привітання -->
-        <div id="start-screen" class="screen active">
-            <h1>🍻 Яке ти пиво від Underwood?</h1>
-            <p>Дай відповідь на 10 коротких та веселих питань, щоб дізнатися, який стиль Underwood найкраще описує твій вайб сьогодні!</p>
-            <button class="btn" onclick="startQuiz()">Пройти тест</button>
-        </div>
-
-        <!-- Екран питань -->
-        <div id="quiz-screen" class="screen">
-            <div class="progress-container">
-                <span id="question-count">Питання 1/10</span>
-                <div class="progress-bar"><div id="progress"></div></div>
-            </div>
-            <h2 id="question-text">Текст питання</h2>
-            <div id="answers-container" class="answers"></div>
-        </div>
-
-        <!-- Екран результату -->
-        <div id="result-screen" class="screen">
-            <span class="badge">Твій внутрішній сорт:</span>
-            <h2 id="beer-title">Назва пива</h2>
-            <p id="beer-style" class="style-tag">Стиль</p>
-            <p id="beer-desc">Опис результату</p>
-            <div class="result-actions">
-                <a id="order-link" href="#" target="_blank" class="btn">🛒 Замовити на сайті</a>
-                <button class="btn btn-secondary" onclick="restartQuiz()">🔄 Пройти ще раз</button>
+        <!-- 2. ЕКРАН ТЕСТУ (ПИТАННЯ) -->
+        <div id="quiz-screen" class="screen hidden">
+            <h2 id="question-title">Завантаження питання...</h2>
+            <div id="answers-container" class="answers-grid">
+                <!-- Кнопки відповідей генерируются через script.js -->
             </div>
         </div>
+
+        <!-- 3. ЕКРАН РЕЗУЛЬТАТУ -->
+        <div id="result-screen" class="screen hidden">
+            <h2 id="result-title">Твій результат</h2>
+            <p id="result-desc">Опис сорту...</p>
+            <button id="restart-btn" class="main-btn">Пройти ще раз 🔄</button>
+        </div>
+
     </div>
 
+    <!-- Підключаємо оновлений script.js -->
     <script src="script.js"></script>
 </body>
 </html>
